@@ -1,0 +1,16 @@
+# File temporanei
+.DS_Store
+Thumbs.db
+*.tmp
+
+# Editor
+.vscode/
+.idea/
+
+# Python
+__pycache__/
+*.pyc
+
+# Backup
+*.bak
+*~
