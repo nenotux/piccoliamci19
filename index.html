@@ -1,0 +1,542 @@
+<!DOCTYPE html>
+<html lang="it">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="description" content="Foto e ricordi della squadra Piccoli Amici 19/20 - San Giorgio in Bosco">
+    <title>⚽ Piccoli Amici 19/20 - San Giorgio in Bosco</title>
+    <link rel="icon" href="data:image/svg+xml,<svg xmlns=%22http://www.w3.org/2000/svg%22 viewBox=%220 0 100 100%22><text y=%22.9em%22 font-size=%2290%22>⚽</text></svg>">
+    <style>
+        * {
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+        body {
+            font-family: -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+            background: linear-gradient(135deg, #c41e3a 0%, #2d5016 100%);
+            min-height: 100vh;
+            color: white;
+            position: relative;
+        }
+
+        body::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 20% 30%, rgba(255, 255, 255, 0.03) 0%, transparent 50%),
+                radial-gradient(circle at 80% 70%, rgba(255, 255, 255, 0.03) 0%, transparent 50%);
+            pointer-events: none;
+            z-index: 0;
+        }
+
+        .container {
+            position: relative;
+            z-index: 1;
+            max-width: 1400px;
+            margin: 0 auto;
+            padding: 20px;
+        }
+
+        header {
+            text-align: center;
+            padding: 40px 20px;
+            background: rgba(255, 255, 255, 0.08);
+            backdrop-filter: blur(10px);
+            border-radius: 20px;
+            margin-bottom: 40px;
+            box-shadow: 0 8px 32px rgba(0, 0, 0, 0.1);
+        }
+
+        h1 {
+            font-size: 3em;
+            font-weight: 300;
+            letter-spacing: -2px;
+            margin-bottom: 10px;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .subtitle {
+            font-size: 1.2em;
+            font-weight: 300;
+            opacity: 0.95;
+        }
+
+        .carousel-section {
+            margin-bottom: 60px;
+        }
+
+        .carousel-container {
+            position: relative;
+            height: 500px;
+            overflow: hidden;
+            border-radius: 20px;
+            background: rgba(0, 0, 0, 0.3);
+            box-shadow: 0 10px 40px rgba(0, 0, 0, 0.3);
+        }
+
+        .carousel-slide {
+            position: absolute;
+            width: 100%;
+            height: 100%;
+            opacity: 0;
+            transition: opacity 1s ease-in-out;
+        }
+
+        .carousel-slide.active {
+            opacity: 1;
+        }
+
+        .carousel-slide img {
+            width: 100%;
+            height: 100%;
+            object-fit: cover;
+        }
+
+        .carousel-caption {
+            position: absolute;
+            bottom: 0;
+            left: 0;
+            right: 0;
+            background: linear-gradient(transparent, rgba(0, 0, 0, 0.8));
+            padding: 50px 20px 25px;
+            text-align: center;
+        }
+
+        .carousel-caption h3 {
+            font-size: 1.5em;
+            font-weight: 400;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.5);
+        }
+
+        .carousel-nav {
+            position: absolute;
+            top: 50%;
+            transform: translateY(-50%);
+            background: rgba(255, 255, 255, 0.25);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 24px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+            transition: all 0.3s;
+            z-index: 10;
+        }
+
+        .carousel-nav:hover {
+            background: rgba(255, 255, 255, 0.4);
+            transform: translateY(-50%) scale(1.1);
+        }
+
+        .carousel-nav.prev { left: 20px; }
+        .carousel-nav.next { right: 20px; }
+
+        .albums-section h2 {
+            font-size: 2em;
+            font-weight: 300;
+            margin-bottom: 30px;
+            text-align: center;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .albums-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(300px, 1fr));
+            gap: 25px;
+        }
+
+        .album-card {
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            border-radius: 15px;
+            overflow: hidden;
+            cursor: pointer;
+            transition: transform 0.3s, box-shadow 0.3s;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+        }
+
+        .album-card:hover {
+            transform: translateY(-8px);
+            box-shadow: 0 15px 40px rgba(0, 0, 0, 0.4);
+        }
+
+        .album-cover {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            background: rgba(0, 0, 0, 0.2);
+        }
+
+        .album-info {
+            padding: 20px;
+        }
+
+        .album-name {
+            font-size: 1.3em;
+            font-weight: 500;
+            margin-bottom: 8px;
+        }
+
+        .album-count {
+            opacity: 0.8;
+            font-size: 0.95em;
+        }
+
+        .modal {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: linear-gradient(135deg, #c41e3a 0%, #2d5016 100%);
+            z-index: 1000;
+            overflow-y: auto;
+        }
+
+        .modal::before {
+            content: '';
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background-image: 
+                radial-gradient(circle at 15% 25%, rgba(255, 255, 255, 0.04) 0%, transparent 50%),
+                radial-gradient(circle at 85% 75%, rgba(255, 255, 255, 0.04) 0%, transparent 50%);
+            pointer-events: none;
+        }
+
+        .modal.active {
+            display: block;
+        }
+
+        .modal-content {
+            position: relative;
+            z-index: 1;
+            max-width: 1200px;
+            margin: 50px auto;
+            padding: 20px;
+        }
+
+        .modal-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin-bottom: 30px;
+            background: rgba(255, 255, 255, 0.08);
+            padding: 20px 30px;
+            border-radius: 15px;
+            backdrop-filter: blur(10px);
+        }
+
+        .modal-title {
+            font-size: 2em;
+            font-weight: 300;
+            text-shadow: 2px 2px 4px rgba(0, 0, 0, 0.2);
+        }
+
+        .close-btn {
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 45px;
+            height: 45px;
+            border-radius: 50%;
+            font-size: 28px;
+            cursor: pointer;
+            transition: all 0.3s;
+            line-height: 1;
+        }
+
+        .close-btn:hover {
+            background: rgba(255, 255, 255, 0.35);
+            transform: rotate(90deg);
+        }
+
+        .photo-grid {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+            gap: 20px;
+        }
+
+        .photo-item {
+            position: relative;
+            overflow: hidden;
+            border-radius: 12px;
+            cursor: pointer;
+            background: rgba(255, 255, 255, 0.1);
+            backdrop-filter: blur(10px);
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.2);
+            transition: transform 0.3s;
+        }
+
+        .photo-item:hover {
+            transform: translateY(-5px) scale(1.02);
+            box-shadow: 0 10px 30px rgba(0, 0, 0, 0.4);
+        }
+
+        .photo-item img {
+            width: 100%;
+            height: 250px;
+            object-fit: cover;
+            display: block;
+        }
+
+        .lightbox {
+            display: none;
+            position: fixed;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            background: rgba(0, 0, 0, 0.95);
+            z-index: 2000;
+            justify-content: center;
+            align-items: center;
+        }
+
+        .lightbox.active {
+            display: flex;
+        }
+
+        .lightbox img {
+            max-width: 90%;
+            max-height: 90%;
+            object-fit: contain;
+        }
+
+        .lightbox-close {
+            position: absolute;
+            top: 20px;
+            right: 20px;
+            background: rgba(255, 255, 255, 0.2);
+            border: none;
+            color: white;
+            width: 50px;
+            height: 50px;
+            border-radius: 50%;
+            font-size: 30px;
+            cursor: pointer;
+            backdrop-filter: blur(10px);
+        }
+
+        .loading {
+            text-align: center;
+            padding: 60px;
+            font-size: 1.2em;
+            opacity: 0.7;
+        }
+
+        footer {
+            text-align: center;
+            padding: 40px 20px;
+            opacity: 0.6;
+            font-size: 0.9em;
+        }
+
+        @media (max-width: 768px) {
+            h1 { font-size: 2.2em; }
+            .carousel-container { height: 300px; }
+            .albums-grid, .photo-grid { grid-template-columns: 1fr; }
+            .carousel-nav { width: 40px; height: 40px; font-size: 20px; }
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <header>
+            <h1>⚽ Piccoli Amici 19/20 ⚽</h1>
+            <p class="subtitle">San Giorgio in Bosco · Passione Rosso-Verde</p>
+        </header>
+
+        <div class="carousel-section">
+            <div class="carousel-container" id="carousel">
+                <div class="loading">⚽ Caricamento foto...</div>
+            </div>
+        </div>
+
+        <div class="albums-section">
+            <h2>I Nostri Album</h2>
+            <div class="albums-grid" id="albumsGrid">
+                <div class="loading">Caricamento album...</div>
+            </div>
+        </div>
+
+        <footer>
+            Made with ❤️ for Piccoli Amici 19/20 by Nazzareno La Manna
+        </footer>
+    </div>
+
+    <div class="modal" id="modal">
+        <div class="modal-content">
+            <div class="modal-header">
+                <h2 class="modal-title" id="modalTitle"></h2>
+                <button class="close-btn" onclick="closeModal()">×</button>
+            </div>
+            <div class="photo-grid" id="photoGrid"></div>
+        </div>
+    </div>
+
+    <div class="lightbox" id="lightbox" onclick="closeLightbox()">
+        <button class="lightbox-close" onclick="closeLightbox()">×</button>
+        <img id="lightboxImg" src="" alt="">
+    </div>
+
+    <script>
+        let albums = [];
+        let currentSlide = 0;
+        let carouselInterval;
+
+        // Carica albums.json
+        async function loadAlbums() {
+            try {
+                const response = await fetch('albums.json');
+                albums = await response.json();
+                console.log('Album caricati:', albums);
+                displayAlbums();
+                displayCarousel();
+            } catch (error) {
+                console.error('Errore caricamento:', error);
+                document.getElementById('albumsGrid').innerHTML = 
+                    '<div class="loading">⚠️ Errore caricamento album. Verifica che albums.json esista.</div>';
+                document.getElementById('carousel').innerHTML = 
+                    '<div class="loading">⚠️ Nessuna foto disponibile</div>';
+            }
+        }
+
+        function displayCarousel() {
+            const allPhotos = [];
+            
+            albums.forEach(album => {
+                album.photos.forEach(photo => {
+                    allPhotos.push({ 
+                        photo: `albums/${album.folder}/${photo}`,
+                        album: album.name 
+                    });
+                });
+            });
+
+            const shuffled = allPhotos.sort(() => Math.random() - 0.5).slice(0, 8);
+            const carousel = document.getElementById('carousel');
+
+            if (shuffled.length === 0) {
+                carousel.innerHTML = '<div class="loading">Nessuna foto disponibile. Aggiungi foto nella cartella albums/</div>';
+                return;
+            }
+
+            carousel.innerHTML = shuffled.map((item, i) => `
+                <div class="carousel-slide ${i === 0 ? 'active' : ''}">
+                    <img src="${item.photo}" alt="${item.album}" loading="lazy">
+                    <div class="carousel-caption">
+                        <h3>📸 ${item.album}</h3>
+                    </div>
+                </div>
+            `).join('') + `
+                <button class="carousel-nav prev" onclick="prevSlide()">‹</button>
+                <button class="carousel-nav next" onclick="nextSlide()">›</button>
+            `;
+
+            startCarousel();
+        }
+
+        function startCarousel() {
+            if (carouselInterval) clearInterval(carouselInterval);
+            carouselInterval = setInterval(nextSlide, 4000);
+        }
+
+        function nextSlide() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (!slides.length) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide + 1) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function prevSlide() {
+            const slides = document.querySelectorAll('.carousel-slide');
+            if (!slides.length) return;
+            slides[currentSlide].classList.remove('active');
+            currentSlide = (currentSlide - 1 + slides.length) % slides.length;
+            slides[currentSlide].classList.add('active');
+        }
+
+        function displayAlbums() {
+            const grid = document.getElementById('albumsGrid');
+            
+            if (!albums.length) {
+                grid.innerHTML = '<div class="loading">Nessun album trovato</div>';
+                return;
+            }
+
+            grid.innerHTML = albums.map((album, i) => `
+                <div class="album-card" onclick="openAlbum(${i})">
+                    <img src="albums/${album.folder}/${album.photos[0]}" 
+                         class="album-cover" 
+                         alt="${album.name}"
+                         loading="lazy">
+                    <div class="album-info">
+                        <div class="album-name">📁 ${album.name}</div>
+                        <div class="album-count">${album.photos.length} foto</div>
+                    </div>
+                </div>
+            `).join('');
+        }
+
+        function openAlbum(index) {
+            const album = albums[index];
+            document.getElementById('modalTitle').textContent = album.name;
+            document.getElementById('photoGrid').innerHTML = album.photos.map(photo => {
+                const photoPath = `albums/${album.folder}/${photo}`;
+                return `
+                    <div class="photo-item" onclick="openLightbox('${photoPath}', event)">
+                        <img src="${photoPath}" alt="${photo}" loading="lazy">
+                    </div>
+                `;
+            }).join('');
+            
+            document.getElementById('modal').classList.add('active');
+            document.body.style.overflow = 'hidden';
+            clearInterval(carouselInterval);
+        }
+
+        function closeModal() {
+            document.getElementById('modal').classList.remove('active');
+            document.body.style.overflow = 'auto';
+            startCarousel();
+        }
+
+        function openLightbox(src, event) {
+            event.stopPropagation();
+            document.getElementById('lightboxImg').src = src;
+            document.getElementById('lightbox').classList.add('active');
+        }
+
+        function closeLightbox() {
+            document.getElementById('lightbox').classList.remove('active');
+        }
+
+        document.addEventListener('keydown', e => {
+            if (e.key === 'Escape') {
+                closeLightbox();
+                closeModal();
+            }
+        });
+
+        document.getElementById('modal').addEventListener('click', e => 
+            e.target.id === 'modal' && closeModal()
+        );
+
+        // Avvio
+        loadAlbums();
+    </script>
+</body>
+</html>
